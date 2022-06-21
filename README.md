@@ -1,7 +1,19 @@
-# 2022-PHP_MVC
-# PHP_MVC
+# php.ini
+    - 주석 해제
+    extension=pdo_mysql
 
-.htaccess 파일 생성
+# httpd.conf
+
+    - 주석 해제       
+    LoadModule rewrite_module modules/mod_rewrite.so
+
+    - AllowOverride None > AllowOverride All 로 변경
+    <Directory "${SRVROOT}/htdocs">
+        AllowOverride All
+    
+# php.ini, httpd.conf 파일 수정 후 아파치 서버 리스타트
+
+# .htaccess 파일 생성
 
     Options -MultiViews
     RewriteEngine On
@@ -11,27 +23,11 @@
     RewriteCond %{REQUEST_FILENAME} !-l
     RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
 
-#httpd.conf 파일 수정
 
-주석 해제
+# Controller 예시
 
-LoadModule rewrite_module modules/mod_rewrite.so
-
-
-
-<Directory "${SRVROOT}/htdocs">
-    AllowOverride All
-
-로 변경
-
-
-
-
-#Controller 예시
-use application\models\BoardModel;
+    use application\models\BoardModel;
  
- 
-
     class BoardController extends Controller {
         public function index() {
             return $this->list();
