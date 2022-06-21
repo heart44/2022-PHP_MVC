@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # php.ini
     - 주석 해제
     extension=pdo_mysql
@@ -14,7 +15,14 @@
 # php.ini, httpd.conf 파일 수정 후 아파치 서버 리스타트
 
 # .htaccess 파일 생성
+=======
+# 2022-PHP_MVC
 
+# php.ini
+extension=pdo_mysql 주석 해제
+>>>>>>> 5acaebefb7efc55c1fade020bae64703927efab6
+
+# .htaccess 파일 생성
     Options -MultiViews
     RewriteEngine On
     Options -Indexes
@@ -23,10 +31,28 @@
     RewriteCond %{REQUEST_FILENAME} !-l
     RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
 
+<<<<<<< HEAD
+=======
+# httpd.conf 파일 수정
+>>>>>>> 5acaebefb7efc55c1fade020bae64703927efab6
 
 # Controller 예시
 
+<<<<<<< HEAD
     use application\models\BoardModel;
+=======
+LoadModule rewrite_module modules/mod_rewrite.so
+
+
+<Directory "${SRVROOT}/htdocs">
+    AllowOverride All
+
+로 변경
+
+
+# Controller 예시
+use application\models\BoardModel;
+>>>>>>> 5acaebefb7efc55c1fade020bae64703927efab6
  
     class BoardController extends Controller {
         public function index() {
