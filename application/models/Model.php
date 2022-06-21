@@ -6,7 +6,7 @@ use PDO;
 
 class Model {
     public function __construct() {
-        $dsn = _DBTYPE . ':host=' ._HOST. ';dbname=' . _DBNAME . ';charset=' . _CHARSET;
+        $dsn = _DBTYPE . ':host=' ._DBHOST. ';dbname=' . _DBNAME . ';charset=' . _CHARSET;
         try {
             $this->pdo = new PDO($dsn, _DBUSER, _DBPASSWORD);
 
