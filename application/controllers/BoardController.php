@@ -5,34 +5,41 @@ use application\models\BoardModel;
 class BoardController extends Controller {
     public function list() {
         $model = new BoardModel();
+        $this->addAttribute(_TITLE, "리스트");
         // $this->list = $model->selBoardList();
-        $this->addAttribute("list", $model->selBoardList()); //위랑 같은 내용임
-        $this->addAttribute("title", "리스트");
-        $this->addAttribute("js", ["board/list"]);
+        $this->addAttribute(_LIST, $model->selBoardList()); //위랑 같은 내용임
+        $this->addAttribute(_JS, ["board/list"]);
 
-        return "board/list.php";      //view 파일명
+        $this->addAttribute(_HEADER, $this->getView("template/header.php"));
+        $this->addAttribute(_MAIN, $this->getView("board/list.php"));
+        $this->addAttribute(_FOOTER, $this->getView("template/footer.php"));
+
+        // return "board/list.php";      //view 파일명
+        return "template/t1.php";
     }
 
     public function detail() {
         $i_board = $_GET["i_board"];
+        $param = ["i_board" => $i_board];
 
         $model = new BoardModel();
-        $param = ["i_board" => $i_board];
+        $this->addAttribute(_TITLE, "디테일");
         $this->addAttribute("data", $model->selBoard($param));
-        $this->addAttribute("title", "디테일");
-        $this->addAttribute("js", ["board/detail"]);
+        $this->addAttribute(_JS, ["board/detail"]);
 
-        // $this->addAttribute(_HEADER, $this->getView("template/header.php"));
-        // $this->addAttribute(_MAIN, $this->getView("board/detail.php?i_board={$i_board}"));
-        // $this->addAttribute(_FOOTER, $this->getView("template/footer.php"));
+        $this->addAttribute(_HEADER, $this->getView("template/header.php"));
+        $this->addAttribute(_MAIN, $this->getView("board/detail.php"));
+        $this->addAttribute(_FOOTER, $this->getView("template/footer.php"));
 
-        return "board/detail.php";
+        // return "board/detail.php";
+        return "template/t1.php";
     }
 
     public function del() {
         $i_board = $_GET["i_board"];
-        $model = new BoardModel();
         $param = ["i_board" => $i_board];
+
+        $model = new BoardModel();
         $this->addAttribute("data", $model->delBoard($param));
 
         return "redirect:/board/list";
@@ -40,9 +47,10 @@ class BoardController extends Controller {
 
     public function mod() {
         $i_board = $_GET["i_board"];
+        $param = ["i_board" => $i_board];
 
         $model = new BoardModel();
-        $param = ["i_board" => $i_board];
+        $this->addAttribute(_TITLE, "글 수정");
         $this->addAttribute("data", $model->selBoard($param));
 
         $this->addAttribute(_HEADER, $this->getView("template/header.php"));
@@ -54,22 +62,39 @@ class BoardController extends Controller {
 
     public function modProc() {
         $i_board = $_POST["i_board"];
-        print $i_board;
         $title = $_POST["title"];
         $ctnt = $_POST["ctnt"];
-
-        $model = new BoardModel();
         $param = [
             "i_board" => $i_board,
             "title" => $title,
             "ctnt" => $ctnt
         ];
-        $this->addAttribute("data", $model->updBoard($param));
+        
+        $model = new BoardModel();
+        $model->updBoard($param);
 
-        // $this->addAttribute(_HEADER, $this->getView("template/header.php"));
-        // $this->addAttribute(_MAIN, $this->getView("board/detail.php?i_board={$i_board}"));
-        // $this->addAttribute(_FOOTER, $this->getView("template/footer.php"));
+        return "redirect:/board/detail?i_board=$i_board";
+    }
 
-        return "redirect:/board/detail?i_board={$i_board}";
+    public function write() {
+        $this->addAttribute(_TITLE, "글 쓰기");
+        $this->addAttribute(_HEADER, $this->getView("template/header.php"));
+        $this->addAttribute(_MAIN, $this->getView("board/write.php"));
+        $this->addAttribute(_FOOTER, $this->getView("template/footer.php"));
+
+        return "template/t1.php";
+    }
+
+    public function writeProc() {
+        $param = [
+            "title" => $_POST["title"],
+            "ctnt" => $_POST["ctnt"],
+            "i_user" => $_SESSION[_LOGINUSER]->i_user,
+        ];
+        
+        $model = new BoardModel();
+        $model->insBoard($param);
+
+        return "redirect:/board/list";
     }
 }

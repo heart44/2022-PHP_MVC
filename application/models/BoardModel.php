@@ -3,6 +3,17 @@ namespace application\models;   //같은 namespace면 use 안해도 됨
 use PDO;
 
 class BoardModel extends Model {
+    public function insBoard(&$param) {
+        $sql = "INSERT INTO t_board (title, ctnt, i_user)
+                VALUES (:title, :ctnt, :i_user)";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':title', $param["title"]);
+        $stmt->bindValue(':ctnt', $param["ctnt"]);
+        $stmt->bindValue(':i_user', $param["i_user"]);
+        $stmt->execute();
+    }
+
     public function selBoardList() {
         $sql = "SELECT b.*, u.nm
                 FROM t_board b, t_user u
@@ -28,23 +39,23 @@ class BoardModel extends Model {
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    public function delBoard(&$param) {
-        $sql = "DELETE FROM t_board WHERE i_board = :i_board";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':i_board', $param["i_board"]);
-        return $stmt->execute();
-    }
-
     public function updBoard(&$param) {
         $sql = "UPDATE t_board
-                SET title = :title, ctnt = :ctnt
+                SET title = :title, ctnt = :ctnt, updated_at = now()
                 WHERE i_board = :i_board";
         
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':i_board', $param["i_board"]);
         $stmt->bindValue(':title', $param["title"]);
         $stmt->bindValue(':ctnt', $param["ctnt"]);
+        return $stmt->execute();
+    }
+    
+    public function delBoard(&$param) {
+        $sql = "DELETE FROM t_board WHERE i_board = :i_board";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':i_board', $param["i_board"]);
         return $stmt->execute();
     }
 }
