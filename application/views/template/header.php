@@ -1,3 +1,4 @@
+<h3>header</h3>
 <div>
     <?php if(isset($_SESSION[_LOGINUSER])) { ?>
         <a href="/board/write"><button>글쓰기</button></a>

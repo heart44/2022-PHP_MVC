@@ -1,3 +1,4 @@
+<h1>글쓰기</h1>
 <div>
     <form action="writeProc" method="POST">
         <div><input type="text" name="title"></div>

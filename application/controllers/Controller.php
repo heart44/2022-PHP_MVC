@@ -2,6 +2,7 @@
 namespace application\controllers;
 
 include_once "application/utils/SessionUtils.php";
+include_once "application/views/board/customFn/dateFormat.php";
 
 abstract class Controller {
     public function __construct($action) {        

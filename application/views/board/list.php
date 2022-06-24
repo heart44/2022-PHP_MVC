@@ -11,6 +11,7 @@
                 <th>제목</th>
                 <th>글쓴이</th>
                 <th>작성일</th>
+                <th>조회</th>
             </tr>
         </thead>
         <tbody>
@@ -19,7 +20,8 @@
                     <td><?= $item->i_board ?></td>
                     <td><?= $item->title ?></td>
                     <td><?= $item->nm ?></td>
-                    <td><?= $item->created_at ?></td>
+                    <td><?= dateFormat($item->created_at) ?></td>
+                    <td><?= $item->view_cnt ?></td>
                 </tr>
             <?php } ?>
         </tbody>

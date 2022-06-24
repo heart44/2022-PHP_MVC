@@ -58,4 +58,48 @@ class BoardModel extends Model {
         $stmt->bindValue(':i_board', $param["i_board"]);
         return $stmt->execute();
     }
+
+    public function insReply(&$param) {
+        $sql = "INSERT INTO t_reply (ctnt, i_user, i_board, rv)
+                VALUES (:ctnt, :i_user, :i_board, :rv)";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':ctnt', $param["ctnt"]);
+        $stmt->bindValue(':i_user', $param["i_user"]);
+        $stmt->bindValue(':i_board', $param["i_board"]);
+        $stmt->bindValue(':rv', $param["rv"]);
+        $stmt->execute();
+    }
+
+    public function selReply(&$param) {
+        $sql = "SELECT r.*, u.nm
+                FROM t_reply r, t_user u
+                WHERE r.i_user = u.i_user and i_board = :i_board";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':i_board', $param["i_board"]);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function delReply(&$param) {
+        $sql = "DELETE FROM t_reply 
+                WHERE i_board = :i_board and i_re = :i_re";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':i_board', $param["i_board"]);
+        $stmt->bindValue(':i_re', $param["i_re"]);
+        $stmt->execute();
+    }
+
+    public function viewCnt(&$param) {
+        $sql = "UPDATE t_board
+                SET view_cnt = view_cnt + 1
+                WHERE i_board = :i_board";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':i_board', $param["i_board"]);
+        $stmt->execute();
+    }
 }

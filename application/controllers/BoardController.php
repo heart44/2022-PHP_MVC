@@ -9,6 +9,7 @@ class BoardController extends Controller {
         // $this->list = $model->selBoardList();
         $this->addAttribute(_LIST, $model->selBoardList()); //위랑 같은 내용임
         $this->addAttribute(_JS, ["board/list"]);
+        $this->addAttribute(_CSS, ["board/list", "common"]);
 
         $this->addAttribute(_HEADER, $this->getView("template/header.php"));
         $this->addAttribute(_MAIN, $this->getView("board/list.php"));
@@ -25,7 +26,9 @@ class BoardController extends Controller {
         $model = new BoardModel();
         $this->addAttribute(_TITLE, "디테일");
         $this->addAttribute("data", $model->selBoard($param));
-        $this->addAttribute(_JS, ["board/detail"]);
+        $this->addAttribute("reData", $model->selReply($param));
+        $model->viewCnt($param);
+        $this->addAttribute(_JS, ["board/detail", "board/reply"]);
 
         $this->addAttribute(_HEADER, $this->getView("template/header.php"));
         $this->addAttribute(_MAIN, $this->getView("board/detail.php"));
@@ -40,7 +43,7 @@ class BoardController extends Controller {
         $param = ["i_board" => $i_board];
 
         $model = new BoardModel();
-        $this->addAttribute("data", $model->delBoard($param));
+        $model->delBoard($param);
 
         return "redirect:/board/list";
     }
@@ -96,5 +99,31 @@ class BoardController extends Controller {
         $model->insBoard($param);
 
         return "redirect:/board/list";
+    }
+
+    public function replyProc() {
+        $param = [
+            "i_board" => $_POST["i_board"],
+            "rv" => $_POST["rv"],
+            "ctnt" => $_POST["ctnt"],
+            "i_user" => $_SESSION[_LOGINUSER]->i_user,
+        ];
+
+        $model = new BoardModel();
+        $model->insReply($param);
+
+        return "redirect:/board/detail?i_board={$_POST["i_board"]}";
+    }
+
+    public function reDel() {
+        $param = [
+            "i_board" => $_GET["i_board"],
+            "i_re" => $_GET["i_re"]
+        ];
+
+        $model = new BoardModel();
+        $model->delReply($param);
+
+        return "redirect:/board/detail?i_board={$_GET["i_board"]}";
     }
 }
